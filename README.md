@@ -15,8 +15,8 @@ This project demonstrates how to use spaCy and Streamlit to perform Named Entity
 
 1. **Clone the repository:**
    ```sh
-   git clone https://github.com/KaileJie/NER.git
-   cd ner-subjectlines
+   git clone https://github.com/KaileJie/NER
+   cd NER
 
 2. **Create a virtual environment and activate it:**
     ```sh
@@ -49,7 +49,7 @@ The app will display the subject lines along with the extracted named entities.
 The directory structure of the Named Entity Recognition (NER) for Email Subject Lines project is outlined below:
 
 ~~~plaintext
-ner-subjectlines/
+NER/
 │
 ├── spacyner.py               # Main application file that contains the Streamlit interface and NER processing
 ├── requirements.txt     # Dependencies file listing required Python packages
