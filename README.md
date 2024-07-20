@@ -59,18 +59,17 @@ ner-subjectlines/
 
 ## Example
 Here’s an example of how the subject lines and extracted entities are displayed:
+
 ### NER Results:
 
-**Subject Line:** Meeting with Dr. John at 6 PM
-  - Dr. John (PERSON)
-  - 6 PM (TIME)
+**Subject Line:** WHOA! Up to 65% off.
+   - Up to 65% (PERCENT)
 
-**Subject Line:** Reminder: Project deadline on July 17th
-  - July 17th (DATE)
+**Subject Line:** WHOA. $29.95 and under sandals are here!
+   - 29.95 (MONEY)
 
-**Subject Line:** Invitation: William's wedding on September 27th
-  - William (PERSON)
-  - September 27th (DATE)
+**Subject Line:** WINTER IS COMING. Be ready.
+   - WINTER (DATE)
 
 ## Contributing
 Contributions are welcome! Please open an issue or submit a pull request with any changes.
