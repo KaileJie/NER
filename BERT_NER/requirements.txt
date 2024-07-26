@@ -1,1 +1,5 @@
-pandas==2.0.3
+streamlit
+pandas
+transformers
+torch
+pyngrok
