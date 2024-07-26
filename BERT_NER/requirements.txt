@@ -1,5 +1,5 @@
-streamlit
-pandas
-transformers
-torch
-pyngrok
+streamlit==1.37.0
+pandas==2.0.3
+transformers==4.42.4
+torch==2.3.1
+pyngrok==7.2.0
