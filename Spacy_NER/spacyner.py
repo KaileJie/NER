@@ -9,10 +9,6 @@ Original file is located at
 
 import pandas as pd
 
-df = pd.read_csv('subjectlines.csv')
-
-df.head()
-
 import streamlit as st
 
 import spacy
@@ -70,4 +66,3 @@ if uploaded_file is not None:
 if __name__ == "__main__":
 
     st.write("Click the button above to process the subject lines")
-
