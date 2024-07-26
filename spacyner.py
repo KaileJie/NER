@@ -9,10 +9,6 @@ Original file is located at
 
 import pandas as pd
 
-df = pd.read_csv('subjectlines.csv')
-
-df.head()
-
 import streamlit as st
 
 import spacy
