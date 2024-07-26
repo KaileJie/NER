@@ -3,7 +3,7 @@ import pandas as pd
 from transformers import pipeline
 
 # Load BERT NER model
-nlp_model = pipeline("ner", model="dbmdz/bert-large-cased-finetuned-conll03-english")
+nlp_model = pipeline("ner", model="dslim/bert-base-NER")
 
 # Function to run NER on a list of subject lines and display the results
 def run_ner(nlp, lines):
@@ -38,4 +38,3 @@ if uploaded_file is not None:
 
 if __name__ == "__main__":
     st.write("Click the button above to process the subject lines")
-
