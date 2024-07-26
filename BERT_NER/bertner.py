@@ -1,56 +1,41 @@
-import pandas as pd
 import streamlit as st
-from transformers import pipeline, AutoModelForTokenClassification, AutoTokenizer
-import torch
+import pandas as pd
+from transformers import pipeline
 
-# Function to load the BERT NER model
-def load_ner_model():
-    model_name = "dslim/bert-base-NER"
-    model = AutoModelForTokenClassification.from_pretrained(model_name)
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-    device = 0 if torch.cuda.is_available() else -1  # Use GPU if available
-    ner_pipeline = pipeline("ner", model=model, tokenizer=tokenizer, device=device)
-    return ner_pipeline
+# Load BERT NER model
+nlp_model = pipeline("ner", model="dbmdz/bert-large-cased-finetuned-conll03-english")
 
-# Function to run NER on a list of subject lines
-def run_ner_on_subject_lines(model, lines):
-    results = []
-    for line in lines:
-        entities = model(line)
-        results.append((line, entities))
-    return results
+# Function to run NER on a list of subject lines and display the results
+def run_ner(nlp, lines):
+    st.write("### NER Results:")
+    all_preds = []
+    for i, line in enumerate(lines):
+        preds = nlp(line)
+        all_preds.append(preds)
+        st.write(f"**Subject Line:** {line}")
+        if preds:
+            for ent in preds:
+                st.write(f"  - {ent['word']} ({ent['entity']})")
+        else:
+            st.write("  - No named entities found")
+        st.write("\n")
 
 # Streamlit app
-st.title("BERT NER with Streamlit")
-st.write("This application uses a BERT model to perform Named Entity Recognition (NER) on email subject lines.")
+st.write("This application demonstrates the use of BERT NER on a set of subject lines")
 
-# Load the NER model
-st.write("Loading the NER model...")
-ner_model = load_ner_model()
-if ner_model:
-    st.write("NER model loaded successfully.")
-
-# CSV file uploader
+# Upload CSV file
 uploaded_file = st.file_uploader("Choose a CSV file", type=["csv"])
 
-if uploaded_file is not None and ner_model is not None:
+if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
+
+    # Display the first few rows of the DataFrame to ensure it loaded correctly
     st.write("Data Preview:")
     st.write(df.head())
 
-    if 'SUBJECT_LINE' in df.columns:
-        subject_lines = df['SUBJECT_LINE'].tolist()
-        st.write("Subject lines loaded successfully.")
-        
-        if st.button('Run NER on Subject Lines'):
-            st.write("Running NER on subject lines...")
-            ner_results = run_ner_on_subject_lines(ner_model, subject_lines)
-            st.write("### NER Results:")
-            for line, entities in ner_results:
-                st.write(f"**Subject Line:** {line}")
-                for entity in entities:
-                    st.write(f"  - {entity['word']}: {entity['entity']}")
-    else:
-        st.write("The CSV file must contain a 'SUBJECT_LINE' column.")
-else:
-    st.write("Upload a CSV file to process the subject lines.")
+    if st.button('Run NER on Subject Lines'):
+        run_ner(nlp_model, df['SUBJECT_LINE'].tolist())
+
+if __name__ == "__main__":
+    st.write("Click the button above to process the subject lines")
+
