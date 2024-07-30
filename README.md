@@ -1,123 +1,137 @@
-# Named Entity Recognition (NER) for Email Subject Lines
+# Named Entity Recognition (NER) Project
 
-This project demonstrates how to use spaCy and Streamlit to perform Named Entity Recognition (NER) on a set of email subject lines. The application allows users to upload a CSV file containing subject lines, processes the text to extract named entities, and displays the results interactively.
+## Overview
+
+This project implements Named Entity Recognition (NER) using different models, specifically spaCy and BERT, from the Hugging Face Transformers library. The project is designed to run on a Streamlit web application, allowing users to upload a CSV file containing subject lines to perform NER and visualize the results. The project can be run locally or on Google Colab.
 
 ## Table of Contents
 
+- [Overview](#overview)
+- [Features](#features)
+- [Project Structure](#project-structure)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Project Structure](#project-structure)
-- [Example](#example)
+- [Running on Google Colab](#running-on-google-colab)
 - [Contributing](#contributing)
 - [License](#license)
 
+## Features
+
+- **NER using spaCy**: Utilize spaCy's pre-trained NER model.
+- **NER using BERT**: Utilize BERT-based NER models from the Hugging Face Transformers library.
+- **Streamlit Integration**: User-friendly web application to upload CSV files and visualize NER results.
+
+## Project Structure
+
+The project is organized into two main subfolders:
+
+- **BERT_NER**: Contains the implementation for BERT-based NER.
+  - `bertnner.py`: The Streamlit app for running BERT-based NER.
+  - `requirements.txt`: The dependencies required for running the BERT NER model.
+  - `README.md`: Instructions specific to the BERT NER implementation.
+  - `subjectlines.csv`: Sample CSV file for testing the BERT NER model.
+
+- **Spacy_NER**: Contains the implementation for spaCy-based NER.
+  - `spacyner.py`: The Streamlit app for running spaCy-based NER.
+  - `requirements.txt`: The dependencies required for running the spaCy NER model.
+  - `README.md`: Instructions specific to the spaCy NER implementation.
+  - `subjectlines.csv`: Sample CSV file for testing the spaCy NER model.
+
 ## Installation
+
+To set up the project locally, follow these steps:
 
 1. **Clone the repository:**
    ```sh
-   git clone https://github.com/KaileJie/NER
+   git clone https://github.com/KaileJie/NER.git
    cd NER
+   ```
 
-2. **Create a virtual environment and activate it:**
-    ```sh
-    python -m venv venv
-    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+2. **Navigate to the desired model folder:**
+
+   For BERT:
+   ```sh
+   cd BERT_NER
+   ```
+
+   For spaCy:
+   ```sh
+   cd Spacy_NER
+   ```
 
 3. **Install the required packages:**
-    ```sh
-    pip install -r requirements.txt
-
-4. **Download the spaCy language model:**
-    ```sh
-    python -m spacy download en_core_web_sm
+   ```sh
+   pip install -r requirements.txt
+   ```
 
 ## Usage
 
-1. **Run the Streamlit app:**
-    ```sh
-    streamlit run spacyner.py
+1. **Run the Streamlit application:**
 
-2. **Upload your CSV file containing email subject lines:**
+   For BERT:
+   ```sh
+   streamlit run bertnner.py
+   ```
 
-The CSV file should have a column named SUBJECT_LINE with the subject lines to process.
+   For spaCy:
+   ```sh
+   streamlit run spacyner.py
+   ```
 
-3. **View the NER results:**
+2. **Upload a CSV file:**
+   - The CSV file should contain a column named `SUBJECT_LINE` with the text data.
 
-The app will display the subject lines along with the extracted named entities.
+3. **View NER results:**
+   - The application will display the named entities identified in each subject line.
 
-## Project Structure
-The directory structure of the Named Entity Recognition (NER) for Email Subject Lines project is outlined below:
+## Running on Google Colab
 
-~~~plaintext
-NER/
-│
-├── spacyner.py               # Main application file that contains the Streamlit interface and NER processing
-├── requirements.txt     # Dependencies file listing required Python packages
-├── README.md            # Detailed project documentation
-└── subjectlines.csv     # Sample CSV file with example subject lines for testing
-~~~
+To run the Streamlit app on Google Colab, follow these steps:
 
-## Example
-Here’s an example of how the subject lines and extracted entities are displayed:
+1. **Clone the repository and install necessary packages:**
 
-### NER Results:
+   ```python
+   !git clone https://github.com/KaileJie/NER
 
-**Subject Line:** WHOA! Up to 65% off.
-   - Up to 65% (PERCENT)
+   # Install the necessary packages
+   !pip install pyngrok
+   !pip install transformers
+   !pip install streamlit
+   !pip install torch
+   !pip install seqeval
+   !pip install pandas
+   ```
 
-**Subject Line:** WHOA. $29.95 and under sandals are here!
-   - 29.95 (MONEY)
+2. **Ensure you have the appropriate Python file ready**: You should have either the `bertnner.py` or `spacyner.py` file in your Colab environment, depending on which model you want to use. If you don't, you can upload it directly to your Colab environment.
 
-**Subject Line:** WINTER IS COMING. Be ready.
-   - WINTER (DATE)
+3. **Run the Streamlit app using pyngrok:**
+
+   ```python
+   import os
+   from threading import Thread
+   from pyngrok import ngrok
+
+   # Add your ngrok token here
+   ngrok.set_auth_token('YOUR_NGROK_TOKEN')
+
+   def run_streamlit():
+       os.system('streamlit run bertnner.py --server.port 8501')  # or spacyner.py
+
+   # Start a thread to run the Streamlit app
+   thread = Thread(target=run_streamlit)
+   thread.start()
+
+   # Open a tunnel to the streamlit port 8501
+   public_url = ngrok.connect(addr='8501', proto='http', bind_tls=True)
+   print('Your Streamlit app is live at:', public_url)
+   ```
+
+Replace `'YOUR_NGROK_TOKEN'` with your actual ngrok authentication token.
 
 ## Contributing
-Contributions are welcome! Please open an issue or submit a pull request with any changes.
+
+Contributions are welcome! Please feel free to submit a Pull Request or open an Issue to discuss improvements, bugs, or new features.
 
 ## License
-This project is licensed under the MIT License.
 
-### Python Code (spacyner.py)
-
-~~~python
-import pandas as pd
-import streamlit as st
-import spacy
-
-# Load the spaCy model
-nlp_model = spacy.load('en_core_web_sm')
-
-# Function to run NER
-def run_ner(nlp, lines):
-    st.write("### NER Results:")
-    for line in lines:
-        doc = nlp(line)
-        st.write(f"**Subject Line:** {line}")
-        if doc.ents:
-            for ent in doc.ents:
-                st.write(f"  - {ent.text} ({ent.label_})")
-        else:
-            st.write("  - No named entities found")
-        st.write("\n")
-
-# Streamlit app
-st.write("This application demonstrates the use of NER on a set of subject lines")
-
-# CSV file uploader
-uploaded_file = st.file_uploader("Choose a CSV file", type=["csv"])
-
-if uploaded_file is not None:
-    df = pd.read_csv(uploaded_file)
-    st.write("Data Preview:")
-    st.write(df.head())
-
-    if st.button('Run NER on Subject Lines'):
-        run_ner(nlp_model, df['SUBJECT_LINE'].tolist())
-
-if __name__ == "__main__":
-    st.write("Click the button above to process the subject lines")
-~~~
-
-## Contact
-If you have any questions or suggestions, feel free to open an issue or contact the repository owner.
-
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
