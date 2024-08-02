@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project implements Named Entity Recognition (NER) using different models, specifically spaCy and BERT, from the Hugging Face Transformers library. The project is designed to run on a Streamlit web application, allowing users to upload a CSV file containing subject lines to perform NER and visualize the results. The project can be run locally or on Google Colab.
+This project implements Named Entity Recognition (NER) using different models, specifically spaCy, NLTK, and BERT from the Hugging Face Transformers library. The project is designed to run on a Streamlit web application, allowing users to upload a CSV file containing subject lines to perform NER and visualize the results. The project can be run locally or on Google Colab.
 
 ## Table of Contents
 
@@ -18,15 +18,16 @@ This project implements Named Entity Recognition (NER) using different models, s
 ## Features
 
 - **NER using spaCy**: Utilize spaCy's pre-trained NER model.
+- **NER using NLTK**: Utilize NLTK for Named Entity Recognition.
 - **NER using BERT**: Utilize BERT-based NER models from the Hugging Face Transformers library.
 - **Streamlit Integration**: User-friendly web application to upload CSV files and visualize NER results.
 
 ## Project Structure
 
-The project is organized into two main subfolders:
+The project is organized into three main subfolders:
 
 - **BERT_NER**: Contains the implementation for BERT-based NER.
-  - `bertnner.py`: The Streamlit app for running BERT-based NER.
+  - `bertner.py`: The Streamlit app for running BERT-based NER.
   - `requirements.txt`: The dependencies required for running the BERT NER model.
   - `README.md`: Instructions specific to the BERT NER implementation.
   - `subjectlines.csv`: Sample CSV file for testing the BERT NER model.
@@ -37,6 +38,13 @@ The project is organized into two main subfolders:
   - `README.md`: Instructions specific to the spaCy NER implementation.
   - `subjectlines.csv`: Sample CSV file for testing the spaCy NER model.
 
+- **NLTK_NER**: Contains the implementation for NLTK-based NER.
+  - `nltkner.py`: The Streamlit app for running NLTK-based NER.
+  - requirements.txt`: The dependencies required for running the NLTK NER model.
+  - README.md`: Instructions specific to the NLTK NER implementation.
+  - subjectlines.csv`: Sample CSV file for testing the NLTK NER model.
+
+**We found that spaCy and NLTK are our two best models as they provide more accurate results.**
 ## Installation
 
 To set up the project locally, follow these steps:
@@ -58,7 +66,11 @@ To set up the project locally, follow these steps:
    ```sh
    cd Spacy_NER
    ```
-
+   
+   For NLTK:
+   ```sh
+   cd NLTK_NER
+   ```
 3. **Install the required packages:**
    ```sh
    pip install -r requirements.txt
@@ -70,7 +82,7 @@ To set up the project locally, follow these steps:
 
    For BERT:
    ```sh
-   streamlit run bertnner.py
+   streamlit run bertner.py
    ```
 
    For spaCy:
@@ -78,6 +90,10 @@ To set up the project locally, follow these steps:
    streamlit run spacyner.py
    ```
 
+   For NLTK:
+   ```sh
+   streamlit run nltkner.py
+   ```
 2. **Upload a CSV file:**
    - The CSV file should contain a column named `SUBJECT_LINE` with the text data.
 
@@ -95,14 +111,10 @@ To run the Streamlit app on Google Colab, follow these steps:
 
    # Install the necessary packages
    !pip install pyngrok
-   !pip install transformers
-   !pip install streamlit
-   !pip install torch
-   !pip install seqeval
-   !pip install pandas
+   !pip install -r "/content/NER/Spacy_NER/requirements.txt" #You can change Spacy_NER to BERT_NER or NLTK_NER
    ```
 
-2. **Ensure you have the appropriate Python file ready**: You should have either the `bertnner.py` or `spacyner.py` file in your Colab environment, depending on which model you want to use. If you don't, you can upload it directly to your Colab environment.
+2. **Ensure you have the appropriate Python file ready**: You should have either the `bertner.py`, `spacyner.py`, or `nltkner.py`file in your Colab environment, depending on which model you want to use. If you don't, you can upload it directly to your Colab environment.
 
 3. **Run the Streamlit app using pyngrok:**
 
@@ -115,7 +127,7 @@ To run the Streamlit app on Google Colab, follow these steps:
    ngrok.set_auth_token('YOUR_NGROK_TOKEN')
 
    def run_streamlit():
-       os.system('streamlit run bertnner.py --server.port 8501')  # or spacyner.py
+       os.system('streamlit run /content/NER/Spacy_NER/spacyner.py --server.port 8501')  # or BERT_NER/bertner.py or NLTK_NER/nltkner.py
 
    # Start a thread to run the Streamlit app
    thread = Thread(target=run_streamlit)
